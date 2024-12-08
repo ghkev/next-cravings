@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import { navHeight } from "./lib/const";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +34,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-400`}
       >
         <Navbar />
-        {children}
+        <main
+          className="container mx-auto px-4"
+          style={{
+            paddingTop: `calc(${navHeight} + 1rem)`,
+          }}
+        >
+          {children}
+        </main>
       </body>
     </html>
   );

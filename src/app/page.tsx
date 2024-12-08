@@ -1,64 +1,34 @@
-import Heading from "./components/Heading";
-import Grid from "./components/Grid";
-import Card from "./components/Card";
+import { z } from "zod";
 
-export default function Home() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ProductSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+});
+
+type Product = z.infer<typeof ProductSchema>;
+
+const fetchProducts = async (): Promise<Product[]> => {
+  const data = await fetch("https://dummyjson.com/products", {
+    // cache: "force-cache",
+  });
+  const res = await data.json();
+  return res.products;
+};
+
+export default async function Home() {
+  const products = await fetchProducts();
+
   return (
-    <main className="container mx-auto px-4">
-      <Heading className="font-bold">Featured meals</Heading>
-      <Grid className="grid-cols-3 gap-x-2">
-        <Card>
-          <Heading>Meal 1</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-        <Card>
-          <Heading>Meal 2</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-        <Card>
-          <Heading>Meal 3</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-      </Grid>
-      <Heading className="font-bold">Featured drinks</Heading>
-      <Grid className="grid-cols-3 gap-x-2">
-        <Card>
-          <Heading>Drink 1</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-        <Card>
-          <Heading>Drink 2</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-        <Card>
-          <Heading>Drink 3</Heading>
-          <hr className="border border-zinc-200" />
-          <p className="text-xs">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illum,
-            aliquid.
-          </p>
-        </Card>
-      </Grid>
+    <main>
+      <ul>
+        {products.map((product) => (
+          <li key={product.id} className="flex gap-x-4">
+            <span>{product.id}</span>
+            <span>{product.title}</span>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }
